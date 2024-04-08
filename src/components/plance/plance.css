@@ -1,0 +1,13 @@
+.plance-page h1{
+    width: 90%;
+    height: 460px;
+    position: relative;
+    left: 80px;
+    top: 5rem;
+    background: #09334b;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    flex-direction: column;
+}
