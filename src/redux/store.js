@@ -2,6 +2,7 @@ import {configureStore,combineReducers } from '@reduxjs/toolkit'
 import tempHumidityReducer from './tempHumiditySlice'
 import panSice from './panSice';
 import authSlice from './authSlice';
+import attendanceSlice from './attendanceSlice';
 import {
     persistStore,
     persistReducer,
@@ -18,7 +19,7 @@ const persistConfig = {
     version: 1,
     storage,
   };
-const rootReducer = combineReducers({auth: authSlice, tempHumiditys:tempHumidityReducer, pans: panSice});
+const rootReducer = combineReducers({auth: authSlice, tempHumiditys:tempHumidityReducer, pans: panSice, attendance:attendanceSlice});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
