@@ -17,9 +17,9 @@ export const loginUser = async(user,dispatch,navigate) => {
 export const registerUser = async(user,dispatch,navigate) => {
     dispatch(registerStart());
     try{
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/user/register`, user);
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/auth/register`, user);
         dispatch(registerSuccess())
-        navigate('/login')
+        // navigate('/login')
     }catch(err){
         dispatch(registerFailed())
     };

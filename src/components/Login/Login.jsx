@@ -78,11 +78,12 @@ function Login() {
     
       const idToken = await result.user.getIdToken();
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/auth/login`, { idToken });
+      console.log(response);
       localStorage.setItem(
         "user",
         JSON.stringify({ name: response.data.name })
       );
-      document.cookie = `token=${JSON.stringify({ token: idToken})}`;
+      document.cookie = `token=${idToken}`;
       navigate("/");
     } catch (error) {
       setError(error.message);
