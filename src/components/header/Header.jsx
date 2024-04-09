@@ -24,15 +24,13 @@ function Header(props) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  // const handleLogout = () => {
-  //   logOut(dispatch, id, navigate, accessToken, axiosJWT);
-  //   // console.log(user);
-  // };
+
   const logout = () => {
     localStorage.clear();
     Cookies.remove("token");
     navigate("/login");
   };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -40,6 +38,13 @@ function Header(props) {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Xóa sessionStorage khi bấm vào Link và chuyển hướng đến URL mục tiêu
+  const handleLinkClick = () => {
+    sessionStorage.removeItem('index');
+    // Thực hiện chuyển hướng đến URL mục tiêu của Link
+  };
+
   return (
     <header className="header">
       <div className="nav__wrapper">
@@ -60,13 +65,13 @@ function Header(props) {
               })} */}
           <ul>
             <li>
-              <Link to={"/"}>Device</Link>
+              <Link to={"/"} onClick={()=>{handleLinkClick()}}>Device</Link>
             </li>
             <li>
-              <Link to={"/plance"}>Plance</Link>
+              <Link to={"/plance"} onClick={()=>{handleLinkClick()}}>Plance</Link>
             </li>
             <li>
-              <Link to={"/attendance"}>Attendance</Link>
+              <Link to={"/attendance"} onClick={()=>{handleLinkClick()}}>Attendance</Link>
             </li>
           </ul>
         </div>
