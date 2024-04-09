@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaTemperatureHigh } from "react-icons/fa6";
 import { FaTint } from 'react-icons/fa';
+import Cookies from "js-cookie";
+
 function DeviceDetail({ id }) {
   const [device, setDevice] = useState("");
   const [dateString, setDateString] = useState("");
@@ -15,6 +17,8 @@ function DeviceDetail({ id }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isCollection, setIsCollection] = useState("");
   const dispatch = useDispatch();
+  const cookie = Cookies.get("token");
+
   const [color, setColor] = useState("#b32aa9");
   const navigate = useNavigate();
   const [temp, setTemp] = useState(29);
@@ -110,7 +114,7 @@ function DeviceDetail({ id }) {
       status: status,
     };
     try {
-      await updateManually(id, dispatch, updateDevice, navigate);
+      await updateManually(id, dispatch, updateDevice, navigate,cookie);
       console.log("update staatus to", status);
       getPans(dispatch);
       fetchDeviceData();

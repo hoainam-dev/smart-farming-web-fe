@@ -9,11 +9,15 @@ import axios from "axios";
 import pump from "../../assets/images/Pumb.png";
 import RGB from "../../assets/images/ledRGB.png";
 import Device from "../device/Device";
-function Control(props) {
+import Cookies from 'js-cookie'
+
+function Control({devices}) {
   const pans = useSelector((state) => state.pans.pans?.pan?.devices);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [currentDeviceId, setCurrentDeviceId] = useState(null);
+  const cookie = Cookies.get("token");
+ 
   const handleDevice = async (id, topic, newStatus) => {
     const status = newStatus ? "ON" : "OFF";
     const updateDevice = {
@@ -21,7 +25,7 @@ function Control(props) {
       status: status,
     };
     try {
-      await updateManually(id, dispatch, updateDevice, navigate);
+      await updateManually(id, dispatch, updateDevice, navigate,cookie);
       getPans(dispatch);
     } catch (error) {
       console.log(error);
@@ -29,17 +33,13 @@ function Control(props) {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
       getPans(dispatch);
-    }, 5000);
-
-    return () => clearInterval(intervalId);
   }, [dispatch]);
 
   return (
     <div className="control">
       <div className="container-btn">
-        {pans
+        {devices
           ?.filter((device) => ["physical"].includes(device.control))
           .map((device) => (
             <div

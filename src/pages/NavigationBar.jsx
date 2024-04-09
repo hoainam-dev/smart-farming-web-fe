@@ -1,21 +1,30 @@
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import Login from "../components/Login/Login";
-import Home from "./home/Home";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
+import Home from "../pages/home/Home"
 function NavigationBar() {
   const token = Cookies.get("token");
-  if(!token) {
-    return <Login />;
-  }
-  const tokenObject = JSON.parse(token);
+  const navigate = useNavigate();
 
-  const decodedToken = jwt_decode(tokenObject?.token); 
-  const user_id = decodedToken.user_id; 
-  if (!user_id) {
-    return <Login />;
-  } else {
-    return <Home />;
-  }
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      try {
+        const decodedToken = jwt_decode(token);
+        if (!decodedToken.user_id) {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        navigate("/login");
+      }
+    }
+  }, [token, navigate]);
+
+  return <Home/>; // Trả về null để không hiển thị bất kỳ giao diện nào
 }
+
 export default NavigationBar;

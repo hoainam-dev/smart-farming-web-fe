@@ -8,6 +8,8 @@ import Register from "./components/Register/Register"
 import NavigationBar from "./pages/NavigationBar";
 import Plance from "./components/plance/Plance";
 import Attendance from "./pages/attendance/Attendance";
+import Device from "./pages/admin/device/Device";
+import SignUpForm from "./pages/admin/user/SignUpForm ";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/login" element={ <Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/plance" element={<Plance />} />
+        <Route path="/device/create" element={<Device />} />
+        <Route path="/user/create" element={<SignUpForm />} />
         {/* attendance */}
         <Route path="/attendance" element={<Attendance />} />
       </Routes>

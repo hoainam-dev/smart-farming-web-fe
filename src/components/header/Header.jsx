@@ -9,14 +9,12 @@ import Cookies from "js-cookie";
 import Logo from "../../assets/images/logo.png";
 
 import "./header.css";
-// import { Container, Row } from "react-bootstrap";
-// import { Container, Row } from "reactstrap";
+
 function Header(props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const userName = user?.name;
-  const id = user?._id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let axiosJWT = createAxios(user, dispatch, logoutSuccess);
@@ -24,10 +22,7 @@ function Header(props) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  // const handleLogout = () => {
-  //   logOut(dispatch, id, navigate, accessToken, axiosJWT);
-  //   // console.log(user);
-  // };
+
   const logout = () => {
     localStorage.clear();
     Cookies.remove("token");
@@ -45,7 +40,7 @@ function Header(props) {
       <div className="nav__wrapper">
         <div className="logo">
           {/* <img src={logo} alt="" /> */}
-          <img className="h-[2.5rem]" src={Logo}/>
+          <img className="h-[2.5rem]" src={Logo} />
           <Link to="/" className="">
             <h1>Smart Farming</h1>
             {/* <p>Since 1989</p> */}
@@ -78,11 +73,7 @@ function Header(props) {
           {user ? (
             <>
               <span className="navbar-username">Hi, {userName}</span>
-              <Link
-                to="/login"
-                className="navbar-logout"
-                onClick={logout}
-              >
+              <Link to="/login" className="navbar-logout" onClick={logout}>
                 Log out
               </Link>
             </>
@@ -105,15 +96,9 @@ function Header(props) {
             <div className="mobile-menu">
               {user ? (
                 <>
-                  <span className="navbar-username">
-                    Hi, {user.username}
-                  </span>
+                  <span className="navbar-username">Hi, {user.username}</span>
 
-                  <Link
-                    to="/logout"
-                    className="navbar-logout"
-                    onClick={logout}
-                  >
+                  <Link to="/logout" className="navbar-logout" onClick={logout}>
                     Log out
                   </Link>
                 </>
