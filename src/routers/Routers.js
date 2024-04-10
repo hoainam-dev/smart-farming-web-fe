@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../pages/home/Home";
-import Plance from "../components/plance/Plance";
 import Attendance from "../pages/attendance/Attendance";
 
 function Routers(props) {
@@ -12,7 +11,6 @@ function Routers(props) {
   return (
     <Routes>
       <Route path="home" element={<Home />} />
-      <Route path="/plance" element={<Plance />} />
     </Routes>
   );
 }

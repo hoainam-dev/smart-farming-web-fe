@@ -1,41 +1,44 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import ReactApexChart from 'react-apexcharts';
 import "./styles.css";
-import {getTempHumiditys} from '../../redux/api/apiTempHumidity'
-import { useSelector, useDispatch } from 'react-redux';
+import { getHumiditys, getTempHumidity } from "../../redux/api/apiTempHumidity";
+import { useSelector, useDispatch } from "react-redux";
 
 function ApexChart() {
   const temp = useSelector((state) => state.tempHumiditys.temps?.temp);
-  const tempHumidity = useSelector((state) => state.tempHumiditys.tempHumiditys?.tempHumidity);
-  const [predictedTemperatures, setPredictedTemperatures] = useState([]);
+  const tempHumidity = useSelector(
+    (state) => state.tempHumiditys.tempHumiditys?.tempHumidity
+  );
   const dispatch = useDispatch();
-  const timestamps = temp.map(tempData => tempData.date); 
-
-  const dates = timestamps.map(timestamp => {
+  const timestamps = tempHumidity.map((tempData) => tempData.timestamp);
+  const humiditys = temp.map((tempData) => tempData._id);
+  // console.log(temp);
+  const dates = timestamps.map((timestamp) => {
     const date = new Date(Date.parse(timestamp));
-    return date.toLocaleString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleString("en-GB", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   });
-
   useEffect(() => {
     // const interval = setInterval(() => {
-      getTempHumiditys(dispatch);
-    // }, 100000);
+    getTempHumidity(dispatch);
+    getHumiditys(dispatch);
+    // }, 10000);
     // console.log(interval);
     // return () => clearInterval(interval);
   }, []);
 
-  const chartData = {
+  const chartDataTemp = {
     options: {
       chart: {
         id: "temperature-chart",
       },
       xaxis: {
-        categories: temp ? dates : [],
+        categories: tempHumidity ? dates : [],
       },
       yaxis: {
         title: {
@@ -46,9 +49,67 @@ function ApexChart() {
     series: [
       {
         name: "Temperature",
-        data: temp ? temp.map((tempData) => tempData.predicted_temperature) : [],
+        data: tempHumidity
+          ? tempHumidity.map((tempData) => tempData.temperature)
+          : [],
       },
     ],
+  };
+
+  const options = {
+    series: [
+      {
+        name: "Humidity",
+        data: temp
+          ? temp.map((tempData) => tempData.averageHumidity)
+          : [],
+      },
+    ],
+    chart: {
+      // height: 350,
+      type: 'line',
+    },
+    forecastDataPoints: {
+      count: 2
+    },
+    stroke: {
+      width: 5,
+      curve: 'smooth'
+    },
+    xaxis: {
+      categories: humiditys ,
+
+      tickAmount: 8,
+      // labels: {
+      //   formatter: function(value, timestamp, opts) {
+      //     return opts.dateFormatter(new Date(timestamp), 'dd MMM')
+      //   }
+      // }
+    },
+    title: {
+      text: 'Humidity',
+      align: 'left',
+      style: {
+        fontSize: "16px",
+        color: '#666'
+      }
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        gradientToColors: [ '#FDD835'],
+        shadeIntensity: 1,
+        type: 'horizontal',
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100]
+      },
+    },
+    yaxis: {
+      min: 70,
+      max: 100
+    }
   };
 
   // Dự đoán nhiệt độ cảnh báo và lời khuyên
@@ -69,22 +130,20 @@ function ApexChart() {
 
   return (
     <div>
+     
       <div className="temperature-chart">
-        {/* <h2>Temperature Chart</h2> */}
-        <Chart
-          options={chartData.options}
-          series={chartData.series}
+        <ReactApexChart
+          options={chartDataTemp.options}
+          series={chartDataTemp.series}
           type="line"
           height={window.innerWidth < 500 ? 300 : 350}
-          width={window.innerWidth < 500 ? 300 : 700}  
+          width={window.innerWidth < 500 ? 300 : 700}
         />
       </div>
-      <div className="temperature-alert">
-        <h3>{alertMessage}</h3>
-        <p>{adviceMessage}</p>
-    
+      <div id="temperature-chart">
+      <ReactApexChart options={options} series={options.series} type="line" height={350} />
+    </div>
 
-      </div>
     </div>
   );
 }

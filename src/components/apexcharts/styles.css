@@ -32,7 +32,7 @@
 /* Định dạng các dấu gợi ý trên đường */
 
 .temperature-chart .apexcharts-tooltip {
-  background-color: #333;
+  background-color: #00f36d;
   border-radius: 4px;
 }
 

@@ -98,8 +98,61 @@ form input {
   list-style: none;
   padding: 0 10px;
   font-size: 1.2rem;
-  color: var(--text-color);
 }
+.header-ul {
+  list-style-type: none;
+  padding: 0;
+
+}
+
+.header-ul li {
+  display: inline;
+  margin-right: 20px;
+  
+}
+
+.header-ul li a {
+  position: relative;
+  color: rgba(255, 255, 255, .7); /* Màu văn bản mặc định */
+  text-decoration: none;
+  position: relative; 
+
+}
+
+.header-ul li a.active::after {
+  content: '';
+  width: 100%;
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: red;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  opacity: 0.7;
+  animation: moveRightLeft 4s linear infinite;
+  transition: opacity 0.3s ease;
+}
+.header-ul li a.active {
+  color: rgb(255, 255, 255);
+}
+.header-ul li a.active:hover::after {
+  opacity: 1; 
+}
+@keyframes moveRightLeft {
+  0% {
+    left: 0;
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    left: 0;
+    width: 0;
+  }
+}
+
 
 @media screen and (max-width: 414px) {
   .logo i {

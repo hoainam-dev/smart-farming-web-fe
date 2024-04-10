@@ -6,7 +6,7 @@ const SignUpForm = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    fistName: '',
+    firstName: '',
     lastName: '',
     faceId: false,
     isAdmin: 0,
@@ -66,12 +66,12 @@ const SignUpForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="fistName" className="block text-sm font-medium text-gray-700">fistName</label>
+          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">firstName</label>
           <input
             type="text"
-            id="fistName"
-            name="fistName"
-            value={formData.fistName}
+            id="firstName"
+            name="firstName"
+            value={formData.firstName}
             onChange={handleChange}
             className="mt-1 p-2 border rounded w-full"
             required

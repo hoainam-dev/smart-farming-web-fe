@@ -61,15 +61,15 @@ function Header(props) {
                 month: "long",
                 day: "numeric",
               })} */}
-          <ul>
+          <ul className="header-ul">
             <li>
-              <Link to={"/"} onClick={()=>{handleLinkClick()}}>Device</Link>
+              <Link to={"/"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/" ? "active" : ""}>Device</Link>
             </li>
             <li>
-              <Link to={"/plance"} onClick={()=>{handleLinkClick()}}>Plance</Link>
+              <Link to={"/plance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/plance" ? "active" : ""}>Plance</Link>
             </li>
             <li>
-              <Link to={"/attendance"} onClick={()=>{handleLinkClick()}}>Attendance</Link>
+              <Link to={"/attendance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/attendance" ? "active" : ""}>Attendance</Link>
             </li>
           </ul>
         </div>

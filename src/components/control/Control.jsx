@@ -23,9 +23,10 @@ function Control({devices}) {
     const updateDevice = {
       topic: topic,
       status: status,
+   
     };
     try {
-      await updateManually(id, dispatch, updateDevice, navigate,cookie);
+      await updateManually(id, dispatch, updateDevice, navigate, cookie);
       getPans(dispatch);
     } catch (error) {
       console.log(error);
@@ -33,7 +34,7 @@ function Control({devices}) {
   };
 
   useEffect(() => {
-      getPans(dispatch);
+    getPans(dispatch);
   }, [dispatch]);
 
   return (
