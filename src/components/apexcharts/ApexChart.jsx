@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import ReactApexChart from 'react-apexcharts';
+import ReactApexChart from "react-apexcharts";
 import "./styles.css";
 import { getHumiditys, getTempHumidity } from "../../redux/api/apiTempHumidity";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,12 +8,13 @@ import { useSelector, useDispatch } from "react-redux";
 function ApexChart() {
   const temp = useSelector((state) => state.tempHumiditys.temps?.temp);
   const tempHumidity = useSelector(
-    (state) => state.tempHumiditys.tempHumiditys?.tempHumidity
+    (state) => state.tempHumiditys?.tempHumiditys?.tempHumidity
   );
   const dispatch = useDispatch();
-  const timestamps = tempHumidity.map((tempData) => tempData.timestamp);
-  const humiditys = temp.map((tempData) => tempData._id);
-  // console.log(temp);
+  const timestamps = tempHumidity
+    ? tempHumidity.map((tempData) => tempData.timestamp)
+    : [];
+  const humiditys = temp ? temp.map((tempData) => tempData._id) : [];
   const dates = timestamps.map((timestamp) => {
     const date = new Date(Date.parse(timestamp));
     return date.toLocaleString("en-GB", {
@@ -24,12 +25,8 @@ function ApexChart() {
     });
   });
   useEffect(() => {
-    // const interval = setInterval(() => {
     getTempHumidity(dispatch);
     getHumiditys(dispatch);
-    // }, 10000);
-    // console.log(interval);
-    // return () => clearInterval(interval);
   }, []);
 
   const chartDataTemp = {
@@ -60,56 +57,49 @@ function ApexChart() {
     series: [
       {
         name: "Humidity",
-        data: temp
-          ? temp.map((tempData) => tempData.averageHumidity)
-          : [],
+        data: temp ? temp.map((tempData) => tempData.averageHumidity) : [],
       },
     ],
     chart: {
       // height: 350,
-      type: 'line',
+      type: "line",
     },
     forecastDataPoints: {
-      count: 2
+      count: 2,
     },
     stroke: {
       width: 5,
-      curve: 'smooth'
+      curve: "smooth",
     },
     xaxis: {
-      categories: humiditys ,
+      categories: humiditys,
 
       tickAmount: 8,
-      // labels: {
-      //   formatter: function(value, timestamp, opts) {
-      //     return opts.dateFormatter(new Date(timestamp), 'dd MMM')
-      //   }
-      // }
     },
     title: {
-      text: 'Humidity',
-      align: 'left',
+      text: "Humidity",
+      align: "left",
       style: {
         fontSize: "16px",
-        color: '#666'
-      }
+        color: "#666",
+      },
     },
     fill: {
-      type: 'gradient',
+      type: "gradient",
       gradient: {
-        shade: 'dark',
-        gradientToColors: [ '#FDD835'],
+        shade: "dark",
+        gradientToColors: ["#FDD835"],
         shadeIntensity: 1,
-        type: 'horizontal',
+        type: "horizontal",
         opacityFrom: 1,
         opacityTo: 1,
-        stops: [0, 100, 100, 100]
+        stops: [0, 100, 100, 100],
       },
     },
     yaxis: {
       min: 70,
-      max: 100
-    }
+      max: 100,
+    },
   };
 
   // Dự đoán nhiệt độ cảnh báo và lời khuyên
@@ -130,7 +120,6 @@ function ApexChart() {
 
   return (
     <div>
-     
       <div className="temperature-chart">
         <ReactApexChart
           options={chartDataTemp.options}
@@ -141,9 +130,13 @@ function ApexChart() {
         />
       </div>
       <div id="temperature-chart">
-      <ReactApexChart options={options} series={options.series} type="line" height={350} />
-    </div>
-
+        <ReactApexChart
+          options={options}
+          series={options.series}
+          type="line"
+          height={350}
+        />
+      </div>
     </div>
   );
 }

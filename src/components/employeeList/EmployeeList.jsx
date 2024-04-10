@@ -79,7 +79,7 @@ function EmployeeList() {
               </th>
 
               <th scope="col" class="px-6 py-3">
-                fistName
+                firstName
               </th>
               <th scope="col" class="px-6 py-3">
                 lastName
@@ -108,15 +108,11 @@ function EmployeeList() {
                   >
                     {data?.email}
                   </th>
-                  <td class="px-6 py-4 text-gray-900">{data?.fistName}</td>
+                  <td class="px-6 py-4 text-gray-900">{data?.firstName}</td>
                   <td class="px-6 py-4 text-gray-900">{data?.lastName}</td>
                   <td class="px-6 py-4 text-gray-900">{data?.isRole}</td>
                   <td class="px-6 py-4 text-gray-900">
-                    {data?.faceId === false
-                      ? "Chưa nhận dạng khuôn mặt"
-                      : "Đã nhận dạng khuôn mặt"
-                      ? ""
-                      : ""}
+                    {data?.faceId}
                   </td>
                   <td class="px-6 py-4 text-gray-900" key={data.id}>
                     {isRegister === data.id ? (
