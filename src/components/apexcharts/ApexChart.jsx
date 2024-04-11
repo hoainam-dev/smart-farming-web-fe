@@ -61,7 +61,7 @@ function ApexChart() {
       },
     ],
     chart: {
-      // height: 350,
+      background: '#fff',
       type: "line",
     },
     forecastDataPoints: {
@@ -73,7 +73,6 @@ function ApexChart() {
     },
     xaxis: {
       categories: humiditys,
-
       tickAmount: 8,
     },
     title: {
@@ -100,6 +99,7 @@ function ApexChart() {
       min: 70,
       max: 100,
     },
+  
   };
 
   // Dự đoán nhiệt độ cảnh báo và lời khuyên

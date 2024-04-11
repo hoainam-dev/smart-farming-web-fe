@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { registerUser } from '../../../redux/api/apiUser';
 import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -12,6 +13,7 @@ const SignUpForm = () => {
     isAdmin: 0,
     isRole: ''
   });
+  const token = Cookies.get('token');
   const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +32,7 @@ const SignUpForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        await registerUser(formData,dispatch)
+        await registerUser(formData,token)
       
     } catch (error) {
       console.error('Error:', error);

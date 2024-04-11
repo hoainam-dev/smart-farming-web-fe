@@ -1,64 +1,82 @@
 .deviceDetail-controller {
-  position: fixed;
-  display: flex;
-  justify-content: flex-start;
-  background-color: rgb(107, 105, 105);
-  z-index: 999;
-  left: 55%;
-  bottom: 10rem;
-  border-radius: 15px;
-  height: 25rem;
-  width: 25rem;
-  padding: 10px 0px 10px 10px;
+    position: fixed;
+    background-color: rgb(107, 105, 105);
+    z-index: 999;
+    right: 15%; 
+    bottom: 10rem;
+    border-radius: 15px;
+    height: 25rem;
+    width: 25rem;
+    padding: 20px; 
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.deviceDetail-controller:hover {
+    transform: scale(1.05);
+}
+
 .wrapper_deviceDetail {
-    width: 20rem;
+    width: 100%;
 }
+
 .wrapper_deviceDetail .deviceDetail {
     display: flex;
     justify-content: space-between;
+    align-items: center; 
     text-align: center;
     height: 100%;
-    width: 100%;
 }
+
 .deviceDetail_button {
     margin-top: 10px;
 }
+
 .wrapper-temp {
     display: flex;
     justify-content: center;
 }
-.wrapper-temp  h2 {
+
+.wrapper-temp h2 {
     color: white;
     margin-top: 25px;
 }
+
 .increase-decrease {
     display: flex;
     flex-direction: column;
     margin-left: 20px;
 }
+
 .increase-decrease button {
     height: 30px;
     width: 30px;
-    background-color: rgb(107, 105, 105);
-    border-radius: 10px ;
-    border: 1px solid white;
+    background-color: rgb(107, 105, 105); 
+    border-radius: 10px;
+    border: 1px solid white; 
     margin-top: 10px;
 }
+
+.increase-decrease button:hover {
+    background-color: rgba(107, 105, 105, 0.7); /* Màu hover */
+}
+
 .wrapper-detail {
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
 }
+
 .wrapper-detail p {
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
     font-size: 17px;
-  }
+}
+
 .wrapper-detail span {
     color: white;
 }
+
 .wrapper-flex {
     display: flex;
     justify-content: space-between;

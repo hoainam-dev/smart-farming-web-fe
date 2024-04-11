@@ -1,5 +1,4 @@
 import "./App.css";
-import Layout from "./components/layout/Layout";
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Home from "../src/pages/home/Home";
 import Header from "./components/header/Header";
@@ -7,9 +6,11 @@ import Login from "./components/Login/Login"
 import Register from "./components/Register/Register"
 import NavigationBar from "./pages/NavigationBar";
 import Attendance from "./pages/attendance/Attendance";
-import Device from "./pages/admin/device/Device";
 import SignUpForm from "./pages/admin/user/SignUpForm ";
-import PlantList from "./pages/plant/PlantList";
+
+import DevicePage from "./pages/devicePage/DevicePage";
+import PlantPage from "./pages/PlantPage/PlantPage";
+import FormCreateDevice from "./pages/admin/device/FormCreateDevice";
 
 function App() {
   return (
@@ -20,9 +21,10 @@ function App() {
         <Route path="/" element={<NavigationBar><Home/></NavigationBar>}/>
         <Route path="/login" element={ <Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/plance" element={<PlantList />} />
-        <Route path="/device/create" element={<Device />} />
+        <Route path="/plance" element={<PlantPage />} />
+        <Route path="/device/create" element={<FormCreateDevice />} />
         <Route path="/user/create" element={<SignUpForm />} />
+        <Route path="/device" element={<DevicePage />} />
         {/* attendance */}
         <Route path="/attendance" element={<Attendance />} />
       </Routes>

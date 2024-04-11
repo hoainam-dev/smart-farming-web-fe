@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { getAllPlant, updatePlant } from "../../../redux/api/apiPlants";
 import Cookies from "js-cookie";
-function FormUpdatePlant({ id, initialData, onClose }) {
-  const [data, setData] = useState(initialData);
+import { createPlant, createPlantCollection } from "../../../redux/api/apiPlants";
+function FormCreateCollectionPlant({ id, onClose }) {
+  const [data, setData] = useState();
   const token = Cookies.get("token");
   const handleChange = (e) => {
     setData({
@@ -14,88 +14,88 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updatePlant(id, data,token);
-      
+      const response = await createPlantCollection(id,data, token);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   return (
-    <div className="fixed inset-0  items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+    <div className="fixed inset-0 items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <form
         onSubmit={handleSubmit}
-        className="h-auto  w-[30rem] bg-white fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-md shadow-lg p-8 flex flex-col justify-between text-black "
+        className="h-auto w-[30rem] bg-white fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-md shadow-lg p-8 flex flex-col justify-between text-black"
       >
         <div className="mb-4">
           <label
-            htmlFor="name"
+            htmlFor="collectionName"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Name
+            Collection Name
           </label>
           <input
-            id="name"
-            name="name"
+            id="collectionName"
+            name="collectionName"
             type="text"
-            value={data.name}
+            value={data?.collectionName || ""}
             onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="location"
-            className="block text-sm font-medium text-gray-700  mb-1"
+            htmlFor="proposal"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Location
+            Proposal
           </label>
           <input
-            id="location"
-            name="location"
+            id="proposal"
+            name="proposal"
             type="text"
-            value={data.location}
+            value={data?.proposal || ""}
             onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="description"
+            htmlFor="dateChek"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Description
+            Date Checked
           </label>
           <input
-            id="description"
-            name="description"
-            type="text"
-            value={data.description}
+            id="dateChek"
+            name="dateChek"
+            type="date"
+            value={data?.dateChek || ""}
             onChange={handleChange}
-            className="mt-1 block w-full py-2 px-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="status"
+            htmlFor="Diagnostic"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Status
+            Diagnostic
           </label>
           <input
-            id="status"
-            name="status"
+            id="Diagnostic"
+            name="Diagnostic"
             type="text"
-            value={data.status}
+            value={data?.Diagnostic || ""}
             onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <button
           type="submit"
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md self-center mb-4"
         >
-          Update
+          Create New
         </button>
         <button
           type="button"
@@ -122,4 +122,4 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   );
 }
 
-export default FormUpdatePlant;
+export default FormCreateCollectionPlant;

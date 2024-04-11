@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { getAllPlant, updatePlant } from "../../../redux/api/apiPlants";
 import Cookies from "js-cookie";
-function FormUpdatePlant({ id, initialData, onClose }) {
+import { updateDevice } from "../../../redux/api/apiPan";
+function FormUpdateDevice({ id, initialData, onClose }) {
   const [data, setData] = useState(initialData);
   const token = Cookies.get("token");
   const handleChange = (e) => {
@@ -14,13 +14,13 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updatePlant(id, data,token);
-      
+      const response = await updateDevice(id, data, token);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   return (
     <div className="fixed inset-0  items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <form
@@ -45,35 +45,37 @@ function FormUpdatePlant({ id, initialData, onClose }) {
         </div>
         <div className="mb-4">
           <label
-            htmlFor="location"
+            htmlFor="topic"
             className="block text-sm font-medium text-gray-700  mb-1"
           >
-            Location
+            Topic
           </label>
           <input
-            id="location"
-            name="location"
+            id="topic"
+            name="topic"
             type="text"
-            value={data.location}
+            value={data.topic}
             onChange={handleChange}
             className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="description"
+            htmlFor="control"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Description
+            Control
           </label>
-          <input
-            id="description"
-            name="description"
-            type="text"
-            value={data.description}
+          <select
+            id="control"
+            name="control"
+            value={data.control}
             onChange={handleChange}
-            className="mt-1 block w-full py-2 px-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="physical">Physical</option>
+            <option value="auto">Auto</option>
+          </select>
         </div>
         <div className="mb-4">
           <label
@@ -82,14 +84,16 @@ function FormUpdatePlant({ id, initialData, onClose }) {
           >
             Status
           </label>
-          <input
+          <select
             id="status"
             name="status"
-            type="text"
             value={data.status}
             onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="ON">ON</option>
+            <option value="OFF">OFF</option>
+          </select>
         </div>
         <button
           type="submit"
@@ -122,4 +126,4 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   );
 }
 
-export default FormUpdatePlant;
+export default FormUpdateDevice;
