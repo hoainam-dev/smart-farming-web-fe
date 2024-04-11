@@ -1,30 +1,46 @@
 import React, { useEffect, useState } from "react";
-import {
-  deleteUserById,
-  getAllEmployee,
-  getUserById,
-} from "../../redux/api/apiAttendance";
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteUserById, getUserById, getAllEmployee } from "../../redux/api/apiUser";
 import EditUserRoleForm from "../../pages/admin/user/EditUserRoleForm";
+import SignUpForm from "../../pages/admin/user/SignUpForm ";
+import { DeleteAlert } from "../alert/Alert";
 
 function EmployeeList() {
+  const dispatch = useDispatch();
+
   const [isDataUser, setIsDataUser] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [userData, setUserData] = useState("");
   const [loading, setLoading] = useState(true); // add loading state
   const [isRegister, setIsRegister] = useState(null);
 
-  console.log(selectedUser);
+  const [isList, setIsList] = useState(true);
+
+  const [faceId, setFaceId] = useState(0);
+
+  const counter = useSelector((state) => state.counter?.value);
+
   useEffect(() => {
     getAllEmployee()
       .then((data) => {
         setIsDataUser(data);
+        // Set faceId tiếp theo
+        let faceIds = [];
+        data.users.map((user)=>{
+          faceIds.push(user.faceId);
+        })
+        faceIds = [...faceIds].sort((a, b) => a - b);
+        for(var i=1; i<=data.users.length; i++){
+          if(data.users[i-1].faceId!=i){
+            setFaceId(i);
+          }
+        }
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
         setLoading(false); 
       });
-  }, []);
+  }, [counter]);
 
   useEffect(() => {
     if (selectedUser) {
@@ -35,7 +51,6 @@ function EmployeeList() {
           setLoading(false); 
         })
         .catch((error) => {
-          console.error(error);
           setLoading(false); 
         });
     }
@@ -51,18 +66,25 @@ function EmployeeList() {
   const handleCancel = () => {
     setIsRegister(null);
   };
-  const handleDelete = (id) => {
-    deleteUserById(id);
+
+  const handleCloseSignUpForm = () => {
+    setIsList(true);
   };
+
+  const handleDelete = async(id) => {
+    await DeleteAlert(async () => {
+      deleteUserById(id, dispatch)
+    }
+    );
+  };
+  
+
   return (
     <>
       <div class="relative overflow-x-auto mt-[2rem] px-[7rem]">
         <div className="flex gap-5 items-center">
-          <select
-            class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg"
-            onChange={handleSelectChange}
-            value={selectedUser}
-          >
+          <select onChange={handleSelectChange} value={selectedUser}
+            class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg">
             <option value="">Select a user</option> {/* add a default option */}
             {isDataUser?.users?.map((data, index) => (
               <option value={data.id} key={index}>
@@ -70,6 +92,10 @@ function EmployeeList() {
               </option>
             ))}
           </select>
+          <button onClick={()=>{setIsList(false)}} className="flex gap-2 items-center px-4 h-[2.4rem] py-2 rounded-lg bg-[#47A992]">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-5 fill-white"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+            <span className="text-white font-medium">Tạo mới</span>
+          </button>
         </div>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -208,6 +234,9 @@ function EmployeeList() {
           </tbody>
         </table>
       </div>
+
+      {/* modal start */}
+      {!isList && <SignUpForm handleCloseSignUpForm={handleCloseSignUpForm} userLenght={isDataUser?.users?.length+1}/>}
     </>
   );
 }

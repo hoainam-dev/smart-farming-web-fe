@@ -1,30 +1,41 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import Home from "../pages/home/Home"
+
+import { Alert } from "../components/alert/Alert";
+
 function NavigationBar() {
   const token = Cookies.get("token");
-  const navigate = useNavigate();
+
+  const [isLogined, setIsLogined] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      setIsLogined(false);
     } else {
       try {
         const decodedToken = jwt_decode(token);
         if (!decodedToken.user_id) {
-          navigate("/login");
+          setIsLogined(false);
         }
       } catch (error) {
         console.error("Error decoding token:", error);
-        navigate("/login");
+        setIsLogined(false);
       }
     }
-  }, [token, navigate]);
+  }, [token]);
 
-  return <Home/>; // Trả về null để không hiển thị bất kỳ giao diện nào
-}
+  return isLogined ? (
+    <Outlet />
+  ) : (
+    <>
+      {Alert(1500, 'Thông báo', 'Bạn Phải đăng nhập trước!','warning', 'OK')}
+      <Navigate to="/login" replace state={{ from: location }} />
+    </>
+  );
+};
+
 
 export default NavigationBar;

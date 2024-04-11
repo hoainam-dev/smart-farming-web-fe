@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { updateUserRole } from '../../../redux/api/apiAttendance';
+import { updateUserRole } from '../../../redux/api/apiUser';
 
 const EditUserRoleForm = ({ id, initialData,onClose }) => {
   const [data, setData] = useState(initialData);

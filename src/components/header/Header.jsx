@@ -1,16 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../../redux/api/apiUser";
 import { logoutSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../redux/createInstance";
+
 import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
+
 
 import Logo from "../../assets/images/logo.png";
 
 import "./header.css";
+import { increase } from "../../redux/counterSlice";
 
-function Header(props) {
+function Header() {
+  const token = Cookies.get("token");
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const counter = useSelector((state) => state.counter?.value);
+
+  useEffect(() => {
+    if (!token) {
+      setIsAdmin(false);
+    } else {
+        try {
+            const decodedToken = jwt_decode(token);
+            if (decodedToken.role==="admin") {
+              setIsAdmin(true);
+            }
+        } catch (error) {
+            console.error("Error decoding token:", error);
+            setIsAdmin(false);
+        }
+    }
+  }, [counter]);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -26,6 +50,7 @@ function Header(props) {
   const logout = () => {
     localStorage.clear();
     Cookies.remove("token");
+    dispatch(increase());
     navigate("/login");
   };
 
@@ -47,52 +72,41 @@ function Header(props) {
     <header className="header">
       <div className="nav__wrapper">
         <div className="logo">
-          {/* <img src={logo} alt="" /> */}
           <img className="h-[2.5rem]" src={Logo} />
           <Link to="/" className="">
             <h1>Smart Farming</h1>
-            {/* <p>Since 1989</p> */}
           </Link>
         </div>
         <div className="date-time">
-          {/* {currentTime.toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })} */}
           <ul className="header-ul">
             <li>
-              <Link to={"/"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/" ? "active" : ""}>Device</Link>
+              <Link to={"/"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/" ? "active" : ""}>Home</Link>
             </li>
-            <li>
-              <Link to={"/plance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/plance" ? "active" : ""}>Plance</Link>
-            </li>
-            <li>
-              <Link to={"/attendance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/attendance" ? "active" : ""}>Attendance</Link>
-            </li>
+            {isAdmin&&(
+              <>
+                <li>
+                  <Link to={"/plance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/plance" ? "active" : ""}>Plance</Link>
+                </li>
+                <li>
+                  <Link to={"/attendance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/attendance" ? "active" : ""}>Attendance</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
         <div className="nav__icons">
           <span className="n__icon">
             <i class="uil uil-bell"></i>
-            <span className="notification"> 2</span>
+            <span className="notification">2</span>
           </span>
           {user ? (
             <>
               <span className="navbar-username">Hi, {userName}</span>
-              <Link to="/login" className="navbar-logout" onClick={logout}>
-                Log out
-              </Link>
+              <Link to="/login" className="navbar-logout" onClick={logout}>Log out</Link>
             </>
           ) : (
             <>
-              <Link to="/login" className="navbar-link text-red-500">
-                Login
-              </Link>
-              <Link to="/register" className="navbar-link">
-                Register
-              </Link>
+              <Link to="/login" className="navbar-link text-white font-medium">Login</Link>
             </>
           )}
         </div>
@@ -104,20 +118,12 @@ function Header(props) {
             <div className="mobile-menu">
               {user ? (
                 <>
-                  <span className="navbar-username">Hi, {user.username}</span>
-
-                  <Link to="/logout" className="navbar-logout" onClick={logout}>
-                    Log out
-                  </Link>
+                  <span className="navbar-username text-white font-medium">Hi, {user.username}</span>
+                  <Link to="/logout" className="navbar-logout text-white font-medium" onClick={logout}>Log out</Link>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="navbar-link">
-                    Login
-                  </Link>
-                  <Link to="/register" className="navbar-link">
-                    Register
-                  </Link>
+                  <Link to="/login" className="navbar-link text-white font-medium">Login</Link>
                 </>
               )}
             </div>

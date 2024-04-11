@@ -5,7 +5,7 @@ const tempHumiditySlide = createSlice(
         name: "tempHumiditys",
         initialState: {
             tempHumiditys: {
-                tempHumidity: null,
+                tempHumidity: [],
                 isFetching: false,
                 error: false
             },

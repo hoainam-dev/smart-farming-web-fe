@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "../pages/home/Home";
-import Attendance from "../pages/attendance/Attendance";
 
 function Routers(props) {
   const navigate = useNavigate();

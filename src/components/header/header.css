@@ -64,7 +64,7 @@
   justify-content: center;
   align-items: center;
   content: "";
-  background-color: rgb(224, 75, 100);
+  background-color: #09334b;
   color: #fff;
   border-radius: 50px;
   font-size: 0.8rem;
@@ -125,7 +125,7 @@ form input {
   display: block;
   width: 0;
   height: 2px;
-  background-color: red;
+  background-color: #09334b;
   position: absolute;
   bottom: -5px;
   left: 0;
