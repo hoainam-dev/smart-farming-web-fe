@@ -5,6 +5,8 @@ import EditUserRoleForm from "../../pages/admin/user/EditUserRoleForm";
 import SignUpForm from "../../pages/admin/user/SignUpForm ";
 import { DeleteAlert } from "../alert/Alert";
 
+import Cookies from "js-cookie";
+
 function EmployeeList() {
   const dispatch = useDispatch();
 
@@ -20,8 +22,10 @@ function EmployeeList() {
 
   const counter = useSelector((state) => state.counter?.value);
 
+  const token = Cookies.get("token");
+
   useEffect(() => {
-    getAllEmployee()
+    getAllEmployee(token)
       .then((data) => {
         setIsDataUser(data);
         // Set faceId tiếp theo
@@ -73,7 +77,7 @@ function EmployeeList() {
 
   const handleDelete = async(id) => {
     await DeleteAlert(async () => {
-      deleteUserById(id, dispatch)
+      deleteUserById(id, dispatch, token);
     }
     );
   };

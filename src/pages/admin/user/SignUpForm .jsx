@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { registerUser } from '../../../redux/api/apiUser';
 import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 
-import "./loading.css"
+import "./loading.css";
 
 const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
   const dispatch = useDispatch();
 
+  const token = Cookies.get('token');
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -32,7 +35,7 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
   function toggleConfirmPasswordVisibility() {
     setIsConfirmPasswordVisible((prevState) => !prevState);
   }
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     let updatedValue = value;
@@ -47,8 +50,7 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     try {
       if (formData.firstName==="" || !formData.firstName ||
           formData.lastName==="" || !formData.lastName ||
@@ -64,7 +66,7 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
         setErrorMessage("Mật khẩu không khớp!");
       }else{
         setIsLoadding(true);
-        registerUser(formData, handleCloseSignUpForm , setErrorMessage, setIsLoadding, dispatch);
+        registerUser(formData, handleCloseSignUpForm , setErrorMessage, setIsLoadding, dispatch, token);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -92,7 +94,7 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
         {/* body area start */}
         <div className="px-10 py-4 overflow-auto max-h-[88%] max-h-[200px]:max-h-[30%] z-50">
           {/* error message */}
-          {!errorMessage==='' ? (
+          {errorMessage!=='' ? (
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mb-3 rounded-xl flex justify-between" role="alert">
                 <span class="block sm:inline">{errorMessage}</span>
                 <button onClick={()=>{setErrorMessage('')}} className=''>x</button>
@@ -186,9 +188,9 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
             </div>
 
             {/* button register */}
-            <button type="submit" 
+            <button type="button" 
               className="flex items-center justify-center gap-3 bg-[#47A992] hover:bg-[#47A992] transition duration-1000 text-white font-bold py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-              onClick={handleSubmit}>
+              onClick={()=>{handleSubmit()}}>
                 {isloadding ? (
                   <div className='loading'></div>
                 ): "Tạo nhân viên"}

@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../auth/config";
 import axios from 'axios';
 import { Alert } from "../alert/Alert";
 import Image from "../../assets/images/background.jpg";
 import { increase } from "../../redux/counterSlice";
-
+import { auth } from "../../auth/config";
 
 function Login() {
   const navigate = useNavigate(); // Create a navigate function
@@ -34,7 +33,7 @@ function Login() {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       setUser({ email: result.user.email });
-    
+
       const idToken = await result.user.getIdToken();
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/auth/login`, { idToken });
       localStorage.setItem(
@@ -49,8 +48,22 @@ function Login() {
       //Show thông báo
       Alert(1500, 'Đăng nhập', 'Đăng nhập thành công!','success', 'OK');
     } catch (error) {
-      console.log(error.message);
-      setError("Tên hoặc mật khẩu không đúng!");
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+        setError("Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.");
+      } else if (error.code === 'auth/invalid-credential') {
+        setError("Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.");
+      } else if (error.response && error.response.status === 400) {
+        setError("Yêu cầu không hợp lệ. Vui lòng thử lại sau.");
+      } else if(error.code === 'auth/too-many-requests') {
+        setError("Quá nhiều yêu cầu từ thiết bị này. Vui lòng thử lại sau.");
+      }else if(error.code === 'auth/network-request-failed') {
+        setError("Lỗi kết nối. Vui lòng kiểm tra lại đường truyền.");
+      }else if(error.code === 'auth/invalid-email') {
+        setError("Email không hợp lệ. Vui lòng kiểm tra lại.");
+      }
+      else {
+        setError(error.message);
+      }
     }
   };
 

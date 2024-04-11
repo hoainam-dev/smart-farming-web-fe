@@ -1,29 +1,37 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { getAllPlant, updatePlant } from "../../../redux/api/apiPlants";
+import { postDevice } from "../../../redux/api/apiDevice";
 import Cookies from "js-cookie";
-function FormUpdatePlant({ id, initialData, onClose }) {
-  const dispatch = useDispatch();
+import { getPans } from "../../../redux/api/apiPan";
+import { useDispatch } from "react-redux";
+function FormCreateDevice({ onClose }) {
+  const [data, setData] = useState({
+    name: "",
+    location: "",
+    description: "",
+    status: "OFF",
+    topic: "",
+    control: "",
+  });
 
-  const [data, setData] = useState(initialData);
   const token = Cookies.get("token");
+
   const handleChange = (e) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
     });
   };
-
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updatePlant(id, data, dispatch, onClose, token);
-      
+      await postDevice(data, token);
+      getPans(dispatch, token);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   return (
     <div className="fixed inset-0  items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <form
@@ -43,62 +51,46 @@ function FormUpdatePlant({ id, initialData, onClose }) {
             type="text"
             value={data.name}
             onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="location"
-            className="block text-sm font-medium text-gray-700  mb-1"
-          >
-            Location
-          </label>
-          <input
-            id="location"
-            name="location"
-            type="text"
-            value={data.location}
-            onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="description"
+            htmlFor="topic"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Description
+            Topic
           </label>
           <input
-            id="description"
-            name="description"
+            id="topic"
+            name="topic"
             type="text"
-            value={data.description}
+            value={data.topic}
             onChange={handleChange}
-            className="mt-1 block w-full py-2 px-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-4">
           <label
-            htmlFor="status"
+            htmlFor="control"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Status
+            Control
           </label>
           <input
-            id="status"
-            name="status"
+            id="control"
+            name="control"
             type="text"
-            value={data.status}
+            value={data.control}
             onChange={handleChange}
-            className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <button
           type="submit"
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md self-center mb-4"
         >
-          Update
+          Tạo mới
         </button>
         <button
           type="button"
@@ -125,4 +117,4 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   );
 }
 
-export default FormUpdatePlant;
+export default FormCreateDevice;

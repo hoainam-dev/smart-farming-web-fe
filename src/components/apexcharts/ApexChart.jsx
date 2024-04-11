@@ -66,8 +66,8 @@ function ApexChart() {
       },
     ],
     chart: {
-      // height: 350,
-      type: 'line',
+      background: '#fff',
+      type: "line"
     },
     forecastDataPoints: {
       count: 2
@@ -77,8 +77,7 @@ function ApexChart() {
       curve: 'smooth'
     },
     xaxis: {
-      categories: humiditys ,
-
+      categories: humiditys,
       tickAmount: 8,
       // labels: {
       //   formatter: function(value, timestamp, opts) {
@@ -108,8 +107,9 @@ function ApexChart() {
     },
     yaxis: {
       min: 70,
-      max: 100
-    }
+      max: 100,
+    },
+
   };
 
   // Dự đoán nhiệt độ cảnh báo và lời khuyên

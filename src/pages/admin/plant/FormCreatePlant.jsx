@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getAllPlant, updatePlant } from "../../../redux/api/apiPlants";
+import { createPlant } from "../../../redux/api/apiPlants";
 import Cookies from "js-cookie";
-function FormUpdatePlant({ id, initialData, onClose }) {
+function FormCreatePlant({ onClose }) {
   const dispatch = useDispatch();
 
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState();
   const token = Cookies.get("token");
+
   const handleChange = (e) => {
+
     setData({
       ...data,
       [e.target.name]: e.target.value,
@@ -17,8 +19,8 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updatePlant(id, data, dispatch, onClose, token);
-      
+      const response = await createPlant(data, dispatch, onClose, token);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -41,7 +43,7 @@ function FormUpdatePlant({ id, initialData, onClose }) {
             id="name"
             name="name"
             type="text"
-            value={data.name}
+            value={data?.name || ""}
             onChange={handleChange}
             className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
@@ -57,7 +59,7 @@ function FormUpdatePlant({ id, initialData, onClose }) {
             id="location"
             name="location"
             type="text"
-            value={data.location}
+            value={data?.location || ""}
             onChange={handleChange}
             className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
@@ -73,7 +75,7 @@ function FormUpdatePlant({ id, initialData, onClose }) {
             id="description"
             name="description"
             type="text"
-            value={data.description}
+            value={data?.description || ""}
             onChange={handleChange}
             className="mt-1 block w-full py-2 px-3 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
@@ -89,7 +91,7 @@ function FormUpdatePlant({ id, initialData, onClose }) {
             id="status"
             name="status"
             type="text"
-            value={data.status}
+            value={data?.status || ""}
             onChange={handleChange}
             className="mt-1  text-black block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
@@ -98,7 +100,7 @@ function FormUpdatePlant({ id, initialData, onClose }) {
           type="submit"
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md self-center mb-4"
         >
-          Update
+          Tạo mới
         </button>
         <button
           type="button"
@@ -125,4 +127,4 @@ function FormUpdatePlant({ id, initialData, onClose }) {
   );
 }
 
-export default FormUpdatePlant;
+export default FormCreatePlant;

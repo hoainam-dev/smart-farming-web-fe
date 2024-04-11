@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
 import { updateUserRole } from '../../../redux/api/apiUser';
 
 const EditUserRoleForm = ({ id, initialData,onClose }) => {
+  const dispatch = useDispatch();
+
   const [data, setData] = useState(initialData);
 
   const handleChange = (e) => {

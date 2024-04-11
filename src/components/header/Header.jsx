@@ -82,13 +82,16 @@ function Header() {
             <li>
               <Link to={"/"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/" ? "active" : ""}>Home</Link>
             </li>
+            <li>
+              <Link to={"/plance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/plance" ? "active" : ""}>Plant</Link>
+            </li>
             {isAdmin&&(
               <>
                 <li>
-                  <Link to={"/plance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/plance" ? "active" : ""}>Plance</Link>
+                  <Link to={"/attendance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/attendance" ? "active" : ""}>Attendance</Link>
                 </li>
                 <li>
-                  <Link to={"/attendance"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/attendance" ? "active" : ""}>Attendance</Link>
+                  <Link to={"/device"} onClick={()=>{handleLinkClick()}} className={window.location.pathname === "/device" ? "active" : ""}>Device</Link>
                 </li>
               </>
             )}

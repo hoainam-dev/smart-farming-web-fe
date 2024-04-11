@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAttendance } from "../../redux/api/apiAttendance";
-import EmployeeList from "../../components/employeeList/EmployeeList";
 import Plant from "../../components/plant/Plant";
 
-function PlantList() {
+function PlantPage() {
   const initialIndex = sessionStorage.getItem("index")
     ? parseInt(sessionStorage.getItem("index"))
     : 0;
@@ -27,4 +26,4 @@ function PlantList() {
   );
 }
 
-export default PlantList;
+export default PlantPage;

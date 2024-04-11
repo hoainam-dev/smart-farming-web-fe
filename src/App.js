@@ -5,10 +5,12 @@ import Header from "./components/header/Header";
 import Login from "./components/Login/Login"
 import NavigationBar from "./pages/NavigationBar";
 import Attendance from "./pages/attendance/Attendance";
-import Device from "./pages/admin/device/Device";
 import SignUpForm from "./pages/admin/user/SignUpForm ";
-import PlantList from "./pages/plant/PlantList";
 import ProtectedRoute from "./pages/ProtectedRoute";
+
+import DevicePage from "./pages/devicePage/DevicePage";
+import Device from "./components/device/Device";
+import PlantPage from "./pages/PlantPage/PlantPage";
 
 function App() {
   
@@ -17,16 +19,23 @@ function App() {
     <Header />
     <div className="App"> 
       <Routes>
+        {/* must logined */}
         <Route element={<NavigationBar />}>
+          {/* home */}
           <Route path="/" element={<Home/>}/>
+          <Route path="/plance" element={<PlantPage />} />
+          {/* admin role */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/plance" element={<PlantList />} />
-            <Route path="/device/create" element={<Device />} />
+            {/* user */}
             <Route path="/user/create" element={<SignUpForm />} />
             {/* attendance */}
             <Route path="/attendance" element={<Attendance />} />
+            {/* devide */}
+            <Route path="/device" element={<DevicePage />} />
+            <Route path="/device/create" element={<Device />} />
           </Route>
         </Route>
+        {/* login */}
         <Route path="/login" element={ <Login />} />
       </Routes>
     </div>

@@ -27,14 +27,14 @@ function Control({devices}) {
     };
     try {
       await updateManually(id, dispatch, updateDevice, navigate, cookie);
-      getPans(dispatch);
+      getPans(dispatch,cookie);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getPans(dispatch);
+    getPans(dispatch,cookie);
   }, [dispatch]);
 
   return (
