@@ -37,16 +37,11 @@ export const updatePlant = async (id, data, dispatch, onClose, token) => {
         console.log(error);
     }
 }
-export const deletePlant = async (id, dispatch, onClose,  token) => {
+export const deletePlant = async (id, dispatch, token) => {
     try {
         const res = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/plants/delete/${id}`, {
             headers: { authorization: `Bearer ${token}` },
-          }); 
-        if (res.status === 201) {
-            //Show thông báo
-            Alert(1500, 'Xóa cây trồng', 'Thông tin cây đã xóa thành công!','success', 'OK');
-        }
-        onClose();
+          });
         dispatch(increase());
         return res.data;
     } catch (error) {

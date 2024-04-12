@@ -6,15 +6,19 @@ import SignUpForm from "../../pages/admin/user/SignUpForm ";
 import { DeleteAlert } from "../alert/Alert";
 
 import Cookies from "js-cookie";
+import { increase } from "../../redux/counterSlice";
+import { CSVLink } from "react-csv";
 
 function EmployeeList() {
   const dispatch = useDispatch();
 
-  const [isDataUser, setIsDataUser] = useState("");
+  const [isDataUser, setIsDataUser] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [userData, setUserData] = useState("");
   const [loading, setLoading] = useState(true); // add loading state
   const [isRegister, setIsRegister] = useState(null);
+
+  const [filter, setFilter] = useState("");
 
   const [isList, setIsList] = useState(true);
 
@@ -30,14 +34,16 @@ function EmployeeList() {
         setIsDataUser(data);
         // Set faceId tiếp theo
         let faceIds = [];
+        let nextId = 1;
         data.users.map((user)=>{
           faceIds.push(user.faceId);
         })
         faceIds = [...faceIds].sort((a, b) => a - b);
-        for(var i=1; i<=data.users.length; i++){
-          if(data.users[i-1].faceId!=i){
-            setFaceId(i);
+        for(var i=0; i<faceIds.length; i++){
+          if(faceIds[i]!==nextId && faceIds[i]<nextId){
+            setFaceId(nextId);
           }
+          nextId++;
         }
         setLoading(false);
       })
@@ -60,9 +66,23 @@ function EmployeeList() {
     }
   }, [selectedUser]);
 
+  const sortByUser = (action) => {
+    if(action===""){
+      dispatch(increase());
+    }
+    if(action==="faceID"){
+      // Sắp xếp mảng users theo faceid
+      setIsDataUser({ users: isDataUser.users.sort((a, b) => a.faceId - b.faceId)});
+    }
+    if(action==="name"){
+      setIsDataUser({ users: isDataUser.users.sort((a, b) => a.lastName.localeCompare(b.lastName))});
+    }
+  };
+
   const handleSelectChange = (event) => {
     setSelectedUser(event.target.value);
   };
+  
   const handleEdit = (id) => {
     setIsRegister(id);
   };
@@ -75,31 +95,55 @@ function EmployeeList() {
     setIsList(true);
   };
 
-  const handleDelete = async(id) => {
-    await DeleteAlert(async () => {
-      deleteUserById(id, dispatch, token);
+  const handleDelete = (id) => {
+    DeleteAlert(async () => {
+      await deleteUserById(id, dispatch);
     }
     );
   };
   
+  // Khai báo các tiêu đề cột cho tệp CSV
+  const headers = [
+    { label: 'Email', key: 'email' },
+    { label: 'FirstName', key: 'firstName' },
+    { label: 'LastName', key: 'lastName' },
+    { label: 'Role', key: 'isRole' },
+    { label: 'FaceID', key: 'faceID' }
+  ];
+
 
   return (
     <>
       <div class="relative overflow-x-auto mt-[2rem] px-[7rem]">
-        <div className="flex gap-5 items-center">
-          <select onChange={handleSelectChange} value={selectedUser}
-            class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg">
-            <option value="">Select a user</option> {/* add a default option */}
-            {isDataUser?.users?.map((data, index) => (
-              <option value={data.id} key={index}>
-                {data.email}
-              </option>
-            ))}
-          </select>
-          <button onClick={()=>{setIsList(false)}} className="flex gap-2 items-center px-4 h-[2.4rem] py-2 rounded-lg bg-[#47A992]">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-5 fill-white"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-            <span className="text-white font-medium">Tạo mới</span>
-          </button>
+        <div className="flex justify-between items-center">
+          <div className="flex gap-5 items-center">
+            <select onChange={handleSelectChange} value={selectedUser}
+              class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg">
+              <option value="">Tìm kiếm nhân viên</option> {/* add a default option */}
+              {isDataUser?.users?.map((data, index) => (
+                <option value={data.id} key={index}>
+                  {data.email}
+                </option>
+              ))}
+            </select>
+            <button onClick={()=>{setIsList(false)}} className="flex gap-2 items-center px-4 h-[2.4rem] py-2 rounded-lg bg-[#47A992]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-5 fill-white"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+              <span className="text-white font-medium">Tạo mới</span>
+            </button>
+          </div>
+          <div className="flex gap-5 items-center">
+            {/* filter */}
+            <select onChange={(e)=>{
+              setFilter(e.target.value);
+              sortByUser(e.target.value);
+              }} 
+              value={filter} 
+              class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg">
+              <option value="">Bộ lọc</option> {/* add a default option */}
+              <option value="name">Sắp xếp theo tên</option>
+              <option value="faceID">Sắp xếp theo FaceID</option>
+            </select>
+          </div>
         </div>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -115,7 +159,7 @@ function EmployeeList() {
                 lastName
               </th>
               <th scope="col" class="px-6 py-3">
-                isRole
+                Role
               </th>
               <th scope="col" class="px-6 py-3">
                 faceId
@@ -156,17 +200,11 @@ function EmployeeList() {
                         </button>
                       </>
                     ) : (
-                      <button
-                        onClick={() => handleEdit(data.id)} // Wrap handleEdit in an arrow function
-                        className="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                      >
+                      <button onClick={() => handleEdit(data.id)} className="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-700">
                         Edit
                       </button>
                     )}
-                    <button
-                      onClick={() => handleDelete(data?.id)}
-                      class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700"
-                    >
+                    <button onClick={() => handleDelete(data?.id)} class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700">
                       Delete
                     </button>
                   </td>
@@ -211,25 +249,16 @@ function EmployeeList() {
                 {isRegister === userData?.user?.id ? (
                       <>
                         <EditUserRoleForm initialData={userData.user} id={userData?.user.id} onClose={handleCancel} />
-                        <button
-                          onClick={handleCancel}
-                          className="px-4 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-700"
-                        >
+                        <button onClick={handleCancel} className="px-4 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-700">
                           Cancel
                         </button>
                       </>
                     ) : (
-                      <button
-                        onClick={() => handleEdit(userData?.user.id)} // Wrap handleEdit in an arrow function
-                        className="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                      >
+                      <button onClick={() => handleEdit(userData?.user.id)} className="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-700">
                         Edit
                       </button>
                     )}
-                  <button
-                    onClick={() => handleDelete(userData?.user?.id)}
-                    class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700"
-                  >
+                  <button onClick={() => handleDelete(userData?.user?.id)} class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700">
                     Delete
                   </button>
                 </td>
@@ -240,7 +269,7 @@ function EmployeeList() {
       </div>
 
       {/* modal start */}
-      {!isList && <SignUpForm handleCloseSignUpForm={handleCloseSignUpForm} userLenght={isDataUser?.users?.length+1}/>}
+      {!isList && <SignUpForm handleCloseSignUpForm={handleCloseSignUpForm} userLenght={faceId} setFaceId={setFaceId}/>}
     </>
   );
 }

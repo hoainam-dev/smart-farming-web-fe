@@ -11,8 +11,6 @@ export default function Attendance() {
   const initialIndex = sessionStorage.getItem('index') ? parseInt(sessionStorage.getItem('index')) : 0;
   const [index, setIndex] = useState(initialIndex);
 
-  const date = useSelector((state) => state.attendance?.date);
-
   const dispatch = useDispatch();
 
   // Lưu giá trị index vào sessionStorage mỗi khi index thay đổi
@@ -39,7 +37,7 @@ export default function Attendance() {
         </div>
       </div>
       {index===0?
-        <AttendenceList days={date}/>
+        <AttendenceList />
       :
         <EmployeeList />
       }

@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 import "./loading.css";
 
-const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
+const SignUpForm = ({ handleCloseSignUpForm, userLenght, setFaceId }) => {
   const dispatch = useDispatch();
 
   const token = Cookies.get('token');
@@ -66,7 +66,7 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
         setErrorMessage("Mật khẩu không khớp!");
       }else{
         setIsLoadding(true);
-        registerUser(formData, handleCloseSignUpForm , setErrorMessage, setIsLoadding, dispatch, token);
+        registerUser(formData, handleCloseSignUpForm , setErrorMessage, setIsLoadding, setFaceId, dispatch, token);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -169,7 +169,7 @@ const SignUpForm = ({ handleCloseSignUpForm, userLenght }) => {
                 </div>
             </div>
             
-            <div className="">
+            <div className="mb-2">
               <label className="block text-sm font-medium text-gray-800 mb-1">Role<span className="text-red-500"> (*)</span></label>
               <div className="flex items-center">
                 {/* admin option */}

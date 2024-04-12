@@ -1,13 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 
 import { CSVLink } from 'react-csv';
 
 import { getAttendanceFromDay } from "../../redux/api/apiAttendance";
 
-export default function AttendanceList({ days }) {
+export default function AttendanceList() {
     const dispatch = useDispatch();
-    const datas = useSelector((state) => state.attendance?.data);
+
+    const days = useSelector((state) => state.attendance?.date);
+
+    var datas = useSelector((state) => state.attendance?.data);
+    const originDatas = useSelector((state) => state.attendance?.data);
+
+    const [users, setUsers] = useState([]);
+
+    const [filter, setFilter] = useState("");
+    const [loadding, setLoadding] = useState(false);
+
+    useEffect(()=>{
+      setUsers(datas);
+    },[loadding]);
+
+    const sortByUser = () => {
+      if(filter===""){
+        setUsers(originDatas);
+        setLoadding(false);
+      }
+      if(filter==="faceID"){
+        // Sắp xếp mảng users theo faceid
+        setUsers([...datas].sort((a, b) => a.FaceId - b.FaceId));
+        setLoadding(false);
+      }
+      if(filter==="name"){
+        setUsers([...datas].sort((a, b) => a.Name.localeCompare(b.Name)));
+        setLoadding(false);
+      }
+    };
+    
+    useEffect(()=>{
+      setLoadding(true);
+      sortByUser();
+    },[filter])
   
     // Khai báo các tiêu đề cột cho tệp CSV
     const headers = [
@@ -16,8 +50,6 @@ export default function AttendanceList({ days }) {
       { label: 'Checkin Date', key: 'Date' },
       { label: 'Checkin Time', key: 'Time' }
     ];
-  
-    const [loadding, setLoadding] = useState(false);
   
     const currentDate = new Date();
   
@@ -45,6 +77,7 @@ export default function AttendanceList({ days }) {
     return(
       <>
         <div class="relative overflow-x-auto mt-[1rem] px-[7rem]">
+        <div className="flex justify-between items-center">
           <div className="flex gap-5 items-center">
             <select onChange={handleSelectChange} class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg">
               <option selected disabled>{todayDateString}</option>
@@ -57,7 +90,15 @@ export default function AttendanceList({ days }) {
               <h5>Xuất file</h5>
             </CSVLink>
           </div>
-          
+          <div className="flex gap-5 items-center">
+            {/* filter */}
+            <select onChange={(e)=>{setFilter(e.target.value)}} value={filter} class="bg-gray-50 border border-gray-300 my-3 text-gray-900 text-sm rounded-lg">
+              <option value="">Bộ lọc</option> {/* add a default option */}
+              <option value="name">Sắp xếp theo tên</option>
+              <option value="faceID">Sắp xếp theo FaceID</option>
+            </select>
+          </div>
+        </div>
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -75,9 +116,9 @@ export default function AttendanceList({ days }) {
                 </td>
               </tr>
               :
-              datas.length!=0
+              users.length!=0
                 ?
-                datas.map((data, index) => (
+                users.map((data, index) => (
                   <tr key={index} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <td class="px-6 py-4 text-black">{data.FaceId}</td>
                     <td class="px-6 py-4 text-black">{data.Name}</td>

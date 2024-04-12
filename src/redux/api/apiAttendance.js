@@ -1,5 +1,5 @@
+import { Alert } from "../../components/alert/Alert";
 import {getDate, getData} from "../attendanceSlice";
-import axios from "axios";
 
 export const getAllAttendance = () => async (dispatch) => {
     try {
@@ -13,10 +13,12 @@ export const getAllAttendance = () => async (dispatch) => {
         if (response.ok) {
             dispatch(getDate(responseData.attendances))
         }else{
-            console.log("Có lỗi xảy ra!");
+            //Show thông báo
+            Alert(1500, 'Thông báo', 'Có lỗi xảy ra!','error', 'OK');
         }
     } catch (err) {
-      console.log("Có lỗi xảy ra!");
+      //Show thông báo
+      Alert(1500, 'Thông báo', 'Có lỗi xảy ra!','error', 'OK');
     }
 };
 
@@ -33,10 +35,12 @@ export const getAttendanceFromDay = ( day, setLoadding ) => async (dispatch) => 
             dispatch(getData(responseData.data));
             setLoadding(false);
         }else{
-            console.log("Có lỗi xảy ra!");
+            //Show thông báo
+            Alert(1500, 'Thông báo', 'Có lỗi xảy ra!','error', 'OK');
         }
     } catch (err) {
-      console.log("Có lỗi xảy ra!");
+      //Show thông báo
+      Alert(1500, 'Thông báo', 'Có lỗi xảy ra!','error', 'OK');
     }
 };
 

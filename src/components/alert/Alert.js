@@ -15,8 +15,8 @@ export const Alert = (timer, title, message, icon, confirmButtonText) => {
 
 export const DeleteAlert = (onDelete) => {
   Swal.fire({
-    title: "Bạn muốn xóa nhân viên?",
-    text: "Bạn sẽ không thể khôi phục nhân viên này!",
+    title: "Bạn muốn xóa?",
+    text: "Bạn sẽ không thể khôi phục dữ liệu này!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -25,11 +25,6 @@ export const DeleteAlert = (onDelete) => {
   }).then((result) => {
     if (result.isConfirmed) {
       onDelete();
-      Swal.fire({
-        title: "Đã xóa!",
-        text: "Bạn đã xóa nhân viên thành công.",
-        icon: "success"
-      });
     }
   });
 };

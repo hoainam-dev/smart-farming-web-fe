@@ -1,19 +1,23 @@
 import axios from "axios";
+import { Alert } from "../../components/alert/Alert";
 export const postDevice = async (data, token) => {
   try {
-    const response = await axios.post(
+    await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}api/devices/create`,
       data,
       {
         headers: { authorization: `Bearer ${token}` },
       }
     );
-    alert("Tạo device thành công");
+    //Show thông báo
+    Alert(1500, 'Tạo thiết bị', 'Tạo thiết bị thành công!','success', 'OK');
   } catch (error) {
     if (error.response && error.response.status === 403) {
-        alert("Bạn không có quyền tạo");
+        //Show thông báo
+        Alert(1500, 'Thông báo', 'Bạn không có quyền tạo!','error', 'OK');
       } else {
-        alert("vui lòng tạo lại thiết bị");
+        //Show thông báo
+        Alert(1500, 'Thông báo', 'vui lòng tạo lại thiết bị!','warning', 'OK');
       }
   }
 };
